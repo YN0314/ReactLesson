@@ -1,4 +1,4 @@
-version: "3"
+version: "3.6"
 services:
   app:
     build:
@@ -9,3 +9,4 @@ services:
       - 13000:3000
     command: sh -c "cd app && yarn start"
     working_dir: /usr/src/app
+    tty: true
