@@ -4,9 +4,27 @@ services:
     build:
       context: ./docker
     volumes:
-      - ./src:/usr/src/app
+      - ./src:/usr/src
     ports:
       - 13000:3000
-    command: sh -c "cd app && yarn start"
+      - 18080:8080
+    command: sh -c "yarn && yarn start && node /usr/src/app/express/server.js"
     working_dir: /usr/src/app
     tty: true
+    networks:
+      - db_network
+  db:
+    image: mysql:8.0
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - db_network
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
+      - TZ=${TZ}
+networks:
+  db_network:
+volumes:
+  mysql:
